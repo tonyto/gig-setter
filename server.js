@@ -44,10 +44,10 @@ app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 var pipe = Pipe.createClient({
-    key: ENV['PUSHER_KEY'] || config.pusher.key,
-    secret: ENV['PUSHER_SECRET'] || config.pusher.secret,
-    app_id: ENV['PUSHER_API_ID'] || config.pusher.api_id,
-    debug: ENV['PUSHER_DEBUG'] || true
+    key: process.env.PUSHER_KEY || config.pusher.key,
+    secret: process.env.PUSHER_SECRET || config.pusher.secret,
+    app_id: process.env.PUSHER_API_ID || config.pusher.api_id,
+    debug: process.env.PUSHER_DEBUG || true
 });
 
 pipe.connect();
