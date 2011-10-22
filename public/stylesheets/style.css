@@ -144,6 +144,10 @@ Not correct application of the current spec, therefore, using longhand to avoid 
            border-radius:200px / 140px;
 }
 
+.oval-thought-border-right.fail {
+	border-color: #fff;
+}
+
 /* creates the larger circle */
 .oval-thought-border-right:before {
 content:""; 
@@ -245,6 +249,13 @@ background:#fff;
 display:block; 
 }
 
+
+.fail,
+.fail:before,
+.fail:after
+{
+	border-color: #f00;
+}
 
 label {
 margin:1em 0 0; 
