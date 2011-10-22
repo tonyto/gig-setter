@@ -28,6 +28,14 @@ app.get('/', function(req, res){
     title: 'Express'
   });
 });
+
+
+app.get('/play', function(req, res){  
+    res.render('play',{
+      title : 'WACADAY - MALLETS MALLET'
+    });
+});
+
 var port = process.env.PORT || 3000;
 app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
