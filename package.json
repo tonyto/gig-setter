@@ -9,5 +9,7 @@
 	, "underscore": ">= 0.0.1"
 	, "restler": ">= 0.0.1"
 	, "pusher-pipe": ">= 0.0.1"
+	, "redis": ">= 0.0.1"
+	, "nodeunit": ">=0.0.1"
   }
 }
