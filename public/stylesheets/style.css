@@ -33,15 +33,45 @@ color:#fff;
 background:#730800;
     }
 
+
+#footer {
+position:fixed;
+left:0px;
+bottom:0px;
+height:100px;
+width:100%;
+color:#FFFF00;
+      z-index:50;
+background:#6600FF;
+}
+
+#header {
+position:fixed;
+left:0px;
+top:0px;
+height:105px;
+width:100%;
+color:#FFFF00;
+background:#6600FF;
+z-index:50;
+
+    font-size:1em; 
+}
+
+#pinky{
+height:100%;
+}
+
 #container {
 width:500px; 
 padding:0 0 50px; 
 margin:0 auto;
+overflow: auto;
 }
 
 h1 {
 margin:1em 0 0; 
-       font-size:2.5em; 
+       font-size:3em; 
        font-weight:normal; 
        line-height:1.2; 
        text-align:center;
@@ -214,3 +244,18 @@ background:#fff;
            /* reduce the damage in FF3.0 */
 display:block; 
 }
+
+
+label {
+margin:1em 0 0; 
+       font-size:3em; 
+       font-weight:normal; 
+       line-height:1.2; 
+       text-align:center;
+}
+
+input{
+    font-size:1em; 
+}
+
+
