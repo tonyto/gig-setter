@@ -1,5 +1,5 @@
 var DictionaryChecker = require("../lib/dictionaryChecker").DictionaryChecker,
-	dictionaryUrl = "http://www.google.com/dictionary/json?callback=dict_api.callbacks.id100&q={q}&sl=en&tl=en&restrict=pr%2Cde&client=te";
+	dictionaryUrl = "http://www.google.com/dictionary/json?callback=a&q={q}&sl=en&tl=en&restrict=pr%2Cde&client=te";
 
 exports["calling check calls rest.get with correct parameters"] = function (test) {
 	var calls = [],
