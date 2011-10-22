@@ -36,16 +36,15 @@ app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 var pipe = Pipe.createClient({
-    key: config.key,
-    secret: config.secret,
-    app_id: config.app_id,
+    key: config.pusher.key,
+    secret: config.pusher.secret,
+    app_id: config.pusher.api_id,
     debug: true
 });
 
-pipe.on('connected', function() {
-	pipe.sockets.on('event:join', function(socket_id, data) {
-		console.log('name');
-	});
+pipe.connect();
+
+pipe.sockets.on('event:join', function(socket_id, data) {
+	console.log(data);
 });
 
-pipe.on('disconnected', function() {});
