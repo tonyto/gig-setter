@@ -1,4 +1,7 @@
-var express = require('express');
+var express = require('express'),
+	Pipe = require('pusher-pipe'),
+	config = require('./config');
+
 
 var app = module.exports = express.createServer();
 
@@ -31,3 +34,18 @@ app.get('/', function(req, res){
 var port = process.env.PORT || 3000;
 app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+var pipe = Pipe.createClient({
+    key: config.key,
+    secret: config.secret,
+    app_id: config.app_id,
+    debug: true
+});
+
+pipe.on('connected', function() {
+	pipe.sockets.on('event:join', function(socket_id, data) {
+		console.log('name');
+	});
+});
+
+pipe.on('disconnected', function() {});
