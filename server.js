@@ -1,4 +1,7 @@
-var express = require('express');
+var express = require('express'),
+	Pipe = require('pusher-pipe'),
+	config = require('./config');
+
 
 var app = module.exports = express.createServer();
 
@@ -28,6 +31,36 @@ app.get('/', function(req, res){
     title: 'Express'
   });
 });
+
+
+app.get('/play', function(req, res){  
+    res.render('play',{
+      title : 'WACADAY - MALLETS MALLET'
+    });
+});
+
 var port = process.env.PORT || 3000;
 app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+var pipe = Pipe.createClient({
+    key: config.pusher.key,
+    secret: config.pusher.secret,
+    app_id: config.pusher.api_id,
+    debug: true
+});
+
+pipe.connect();
+
+pipe.sockets.on('event:create-game', function(socket_id, data) {
+	console.log(data);
+});
+
+pipe.sockets.on('event:join-game', function(socket_id, data) {
+	console.log(data);
+});
+
+pipe.sockets.on('event:play', function(socket_id, data) {
+	console.log(data);
+	pipe.socket(socket_id).trigger("played", data);
+});
