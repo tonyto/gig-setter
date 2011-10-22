@@ -58,8 +58,9 @@ z-index:50;
     font-size:1em; 
 }
 
-#pinky{
-height:100%;
+.pinky{
+position:absolute;
+z-index:100;
 }
 
 #container {
