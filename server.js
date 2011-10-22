@@ -3,8 +3,7 @@
  * Module dependencies.
  */
 
-var express = require('express')
-	, SongkickApi = require('./lib/songkick');
+var express = require('express');
 
 var app = module.exports = express.createServer();
 
@@ -30,8 +29,6 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', function(req, res){
-	var api = new SongkickApi();
-	api.getLocation('london');
   res.render('index', {
     title: 'Express'
   });
