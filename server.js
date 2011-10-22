@@ -60,10 +60,7 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 });
 
-//dynamic game name channel???
-pipe.sockets.on('event:submit-word', function(socket_id, data) {
+pipe.sockets.on('event:play', function(socket_id, data) {
 	console.log(data);
-	//log it
-	//broadcast to clients
-	pipe.channel('my_channel').trigger('my_event', data)
+	pipe.socket(socket_id).trigger("played", data);
 });

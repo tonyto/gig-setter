@@ -41,10 +41,12 @@ $(document).ready(function() {
 		},
 
 		events: {
-		    "click .user-submit": "createPlayer"
+		    "keypress .user-submit": "createPlayer"
 		},
 		
 		createPlayer: function () {
+			var text = $('.user').val();
+			if (!text || e.keyCode != 13) return;
 			pusher.back_channel.trigger('join', data);
 		    var player = new Player({name: text});
 		    new ChallengeView(player);
