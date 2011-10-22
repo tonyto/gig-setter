@@ -3,7 +3,8 @@
  * Module dependencies.
  */
 
-var express = require('express');
+var express = require('express')
+	, SongkickApi = require('./lib/songkick');
 
 var app = module.exports = express.createServer();
 
@@ -19,16 +20,18 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 // Routes
 
 app.get('/', function(req, res){
+	var api = new SongkickApi();
+	api.getLocation('london');
   res.render('index', {
     title: 'Express'
   });
