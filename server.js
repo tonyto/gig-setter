@@ -32,10 +32,18 @@ app.get('/', function(req, res){
   });
 });
 
+<<<<<<< HEAD
 app.get('/game', function(req, res){
   res.render('game', {
     title: 'game on sucker'
   });
+=======
+
+app.get('/play', function(req, res){  
+    res.render('play',{
+      title : 'WACADAY - MALLETS MALLET'
+    });
+>>>>>>> 7cadad43eb82b12e3100fa2e274ccd289a562d5f
 });
 
 var port = process.env.PORT || 3000;
