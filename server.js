@@ -7,6 +7,7 @@ var express = require('express'),
 	dictionaryChecker = new DictionaryChecker(),
     conversationStore = require('./lib/conversation-storer.js').conversationStore,
 	app = module.exports = express.createServer(),
+	current_player,
 	users = [];
 	
 // Configuration
@@ -63,10 +64,11 @@ pipe.channels.on('event:join-game', function(channel_name, socket_id, data) {
 		pipe.channel(channel_name).trigger('waiting', {});
 	} else if (users.length === 2) {
 		console.log("Two players; start game");
-		pipe.channel(channel_name).trigger("startGame", {currentPlayer: users[0]});
+		console.log("Current player: " + getNextPlayer());
+		pipe.channel(channel_name).trigger("startGame", {currentPlayer: current_player});
 	} else {
 		console.log("More than two players; join existing game");
-		pipe.channel(channel_name).trigger("joinExistingGame", {});
+		pipe.channel(channel_name).trigger("joinExistingGame", {currentPlayer: current_player});
 	}
 });
 
@@ -85,7 +87,7 @@ function onEventPlay(channel_name, socket_id, data) {
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: getNextPlayer(data.player),
+			currentPlayer: getNextPlayer(),
             score: conversationStore.getCurrentScores(channel_name),
 			success: success
 		});
@@ -98,17 +100,20 @@ function onEventPlay(channel_name, socket_id, data) {
     }
 }
 
-function getNextPlayer(player) {
-	var current_player_index = users.indexOf(player),
-		current_player = users[(current_player_index + 1) % users.length];
+function getNextPlayer() {
+	var index;
+
+	if(current_player === undefined) {
+		current_player = users[0];
+		return current_player;
+	}
+	
+	index = users.indexOf(current_player);
+	
+	current_player = users[(index + 1) % users.length];
 	
 	console.log("Current player found");
 	eyes.inspect(current_player);
 	
 	return current_player;
-}
-
-function getNextPlayer(player) {
-	var current_player = users.indexOf(player);
-	return users[current_player++ % users.length];
 }

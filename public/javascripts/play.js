@@ -7,7 +7,7 @@ $(function () {
 
 		player = Math.random(),
 	
-		game = "blah",
+		game = "foo",
 		
 		channel = pusher.subscribe(game),
 	
@@ -18,10 +18,14 @@ $(function () {
 				});
 				_.bindAll(this, "onStartGame");
 				_.bindAll(this, "onPlayed");
+				_.bindAll(this, "onJoinExistingGame");
 				channel.bind("startGame", this.onStartGame);
 				channel.bind("played", this.onPlayed);
+				channel.bind("joinExistingGame", this.onPlayed);
 			},
 			onStartGame: function (data) {
+				console.log("gameModel.onStartGame");
+				console.log(data);
 				this.set({currentPlayer: data.currentPlayer});
 				eventAgg.trigger("startGame");
 				eventAgg.trigger("nextPlay", {
@@ -29,6 +33,16 @@ $(function () {
 				});
 			},
 			onPlayed: function (data) {
+				console.log("gameModel.onPlayed");
+				console.log(data);
+				this.set({currentPlayer: data.currentPlayer});
+				eventAgg.trigger("nextPlay", {
+					isCurrentPlayer: this.get("player") === this.get("currentPlayer")
+				});
+			},
+			onJoinExistingGame: function (data) {
+				console.log("gameModel.onJoinExistingGame");
+				console.log(data);
 				this.set({currentPlayer: data.currentPlayer});
 				eventAgg.trigger("nextPlay", {
 					isCurrentPlayer: this.get("player") === this.get("currentPlayer")
@@ -46,11 +60,11 @@ $(function () {
 			initialize: function () {
 				$(this.el).hide();
 				_.bindAll(this, "onNextPlay");
-				channel.bind("joinExistingGame", this.onNextPlay);
 				eventAgg.bind("nextPlay", this.onNextPlay);
 			},
 			model: gameModel,
 			onSubmit: function () {
+				console.log("playView.onsubmit");
 				var input = this.$("input");
 				channel.trigger("play", {
 					word: input.val(),
@@ -61,6 +75,8 @@ $(function () {
 				return false;
 			},
 			onNextPlay: function (data) {
+				console.log("playView.onNextPlay");
+				console.log(data);
 				if (data.isCurrentPlayer) {
 					$(this.el).show();
 				} else {
@@ -87,6 +103,8 @@ $(function () {
 			},
 			
 			onPlayed: function(data){
+				console.log("gameView.onPlayed");
+				console.log(data);
 				var elements = "<blockquote class='" + 
 					(data.success ? "success" : "fail") + 
 					" " +
@@ -101,12 +119,14 @@ $(function () {
 			},
 			
 			onStartGame: function() {
+				console.log("gameView.onStartGame");
 				console.log("start game");
 				this.$("h1").remove();
 				$(this.el).show()
 			},
 			
 			onWaiting: function(data) {
+				console.log("gameView.onWaiting");
 				console.log(data);
 				$(this.el).append('<h1>waiting for players</h1>');
 			}
@@ -117,14 +137,15 @@ $(function () {
 			model: gameModel,
 			
 			events: {
-				"submit #player-form": "onJoinedGame"
+				"submit #player-form": "onSubmit"
 			},
 			
 			initialize: function () {
-				_.bindAll(this, "onJoinedGame");
+				_.bindAll(this, "onSubmit");
 			},
 			
-			onJoinedGame: function (e) {
+			onSubmit: function () {
+				console.log("playerView.onSubmit");
 				var player = this.$('input').val();
 				if(player) {
 					channel.trigger("join-game", {player: player});
