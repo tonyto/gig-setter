@@ -65,7 +65,8 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 pipe.channels.on('event:play', function(channel_name, socket_id, data) {
 	eyes.inspect(arguments);
 	eyes.inspect(pipe.sockets);
-	dictionaryChecker.check(data.word, function (success) {
+	
+	function respond(success){
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
@@ -80,5 +81,7 @@ pipe.channels.on('event:play', function(channel_name, socket_id, data) {
 			game: data.game,
 			success: true
 		});
-	});
+	}
+	
+	dictionaryChecker.check(data.word, respond);
 });
