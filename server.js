@@ -67,13 +67,15 @@ function onEventPlay(channel_name, socket_id, data) {
 			currentPlayer: "opponent",
 			success: success
 		});
-		pipe.channel(channel_name).trigger("played", {
-			word: "another " + data.word,
-			player: "opponent",
-			currentPlayer: data.player,
-			game: data.game,
-			success: true
-		});
+		setTimeout(function () {
+			pipe.channel(channel_name).trigger("played", {
+				word: "another " + data.word,
+				player: "opponent",
+				currentPlayer: data.player,
+				game: data.game,
+				success: true
+			});
+		}, 2000);
 	}
 	
 	dictionaryChecker.check(data.word, respond);

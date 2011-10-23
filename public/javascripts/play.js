@@ -27,6 +27,9 @@ $(function () {
 			},
 			onPlayed: function (data) {
 				this.set({currentPlayer: data.currentPlayer});
+				eventAgg.trigger("nextPlay", {
+					isCurrentPlayer: this.get("player") === this.get("currentPlayer")
+				});
 			}
 		}),
 		
@@ -40,7 +43,9 @@ $(function () {
 			initialize: function () {
 				$(this.el).hide();
 				_.bindAll(this, "onStartGame");
+				_.bindAll(this, "onNextPlay");
 				eventAgg.bind("startGame", this.onStartGame);
+				eventAgg.bind("nextPlay", this.onNextPlay);
 			},
 			model: gameModel,
 			onSubmit: function () {
@@ -55,6 +60,13 @@ $(function () {
 			},
 			onStartGame: function () {
 				$(this.el).show();
+			},
+			onNextPlay: function (data) {
+				if (data.isCurrentPlayer) {
+					$(this.el).show();
+				} else {
+					$(this.el).hide();
+				}
 			}
 		}),
 		
