@@ -1,7 +1,7 @@
 #header
-    h1 Mallets Mallet
-
-img(src= '/images/pinky-punky.png', class='pinky')
+    #pinky
+        h1 Mallett's Mallet
+        img(src= '/images/pinky-punky.png')
 
 #container
     blockquote.oval-thought-border-right
@@ -14,7 +14,8 @@ img(src= '/images/pinky-punky.png', class='pinky')
         p Eggs
 
 #footer
-    label ENTER YOUR WORD:
-        input(name="word")
+    form#play
+        label ENTER YOUR WORD:
+            input(name="word")
 
 script(src="/javascripts/play.js");

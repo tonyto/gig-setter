@@ -1,15 +1,15 @@
 $(function () {
 	var 
 		PlayView = Backbone.View.extend({
-			el: "#footer",
+			el: "#play",
 			events: {
-				"keydown input": "onKeyDown"
+				"submit": "onSubmit"
 			},
-			onKeyDown: function (e) {
-				console.log(e);
-				if(e.keyCode === 13) {
-					pusher.back_channel.trigger("play", e.currentTarget.value);
-				}
+			onSubmit: function () {
+				var input = $("input");
+				pusher.back_channel.trigger("play", {word: input.val()});
+				input.val("");
+				return false;
 			}
 		}),
 		
@@ -26,7 +26,7 @@ $(function () {
 			},
 			
 			onPlayed: function(data){
-				$(this.el).append("<blockquote class='oval-thought-border-left'><p>" + data + "</p></blockquote>");
+				$(this.el).append("<blockquote class='oval-thought-border-left " + (data.success ? "success" : "fail") + "'><p>" + data.word + "</p></blockquote>");
 			}
 		}),
 		
