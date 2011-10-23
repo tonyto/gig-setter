@@ -48,13 +48,36 @@ var pipe = Pipe.createClient({
 
 pipe.connect();
 
+pipe.sockets.on('open', function(socket_id) {
+	console.log('hello');
+});
+
+pipe.sockets.on('close', function(socket_id) {
+//	var remove_user = _.detect(users, function(user) {
+//		user.s_id === socket_id;
+//	});
+	console.log('closing connection for: ' + socket_id);	
+	//remove user form list
+	//alert other users
+});
+
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
+	data.s_id = socket_id;
 	users.push(data);
 	if (users.length === 1) {
 		console.log('not enough players');
 		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
 	};
+});
+
+pipe.sockets.on('event:next-player', function(socket_id, data) {
+	for(var i=0; i<=users.length; i+=1){
+		if(users[i].s_id === socket_id){
+			console.log('found current player, next player is: ' + users[i+1].player);
+			pipe.socket(users[i+1].s_id).trigger('your-turn', {player: users[i+1].player});
+		}
+	}	
 });
 
 pipe.channels.on('event:play', onEventPlay);
@@ -68,10 +91,15 @@ function onEventPlay(channel_name, socket_id, data) {
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: data.player === "bnathyuw" ? "tony" : "bnathyuw",
+			currentPlayer: getNextPlayer(data.player),
 			success: success
 		});
 	}
 	
 	dictionaryChecker.check(data.word, respond);
+}
+
+function getNextPlayer(player) {
+	var current_player = users.indexOf(player);
+	return users[current_player++ % users.length];
 }
