@@ -58,9 +58,11 @@ pipe.channels.on('event:join-game', function(channel_name, socket_id, data) {
 	if (users.length <= 1) {
 		console.log('not enough players');
 		pipe.channel(channel_name).trigger('waiting', {});
-	} else {
+	} else if (users.length === 2) {
 		console.log(users.length + " players found. game on!");
 		pipe.channel(channel_name).trigger("startGame", {currentPlayer: users[0]});
+	} else {
+		pipe.channel(channel_name).trigger("joinExistingGame", {});
 	}
 });
 

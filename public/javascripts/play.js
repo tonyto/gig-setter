@@ -18,9 +18,15 @@ $(function () {
 				});
 				_.bindAll(this, "onStartGame");
 				_.bindAll(this, "onPlayed");
-				channel.bind("startGame", this.onPlayed);
+				channel.bind("startGame", this.onStartGame);
 				channel.bind("played", this.onPlayed);
-				
+			},
+			onStartGame: function (data) {
+				this.set({currentPlayer: data.currentPlayer});
+				eventAgg.trigger("startGame");
+				eventAgg.trigger("nextPlay", {
+					isCurrentPlayer: this.get("player") === this.get("currentPlayer")
+				});
 			},
 			onPlayed: function (data) {
 				this.set({currentPlayer: data.currentPlayer});
@@ -42,6 +48,7 @@ $(function () {
 				_.bindAll(this, "onStartGame");
 				_.bindAll(this, "onNextPlay");
 				eventAgg.bind("startGame", this.onStartGame);
+				channel.bind("joinExistingGame", this.onNextPlay);
 				eventAgg.bind("nextPlay", this.onNextPlay);
 			},
 			model: gameModel,
@@ -74,11 +81,9 @@ $(function () {
 			initialize: function () {
 				_.bindAll(this, "onPlayed");
 				_.bindAll(this, "onStartGame");
-				_.bindAll(this, "onWait");
+				_.bindAll(this, "onWaiting");
 				
-				pusher.back_channel.bind("waiting", function (data) {
-					self.onWait(data);
-				});
+				channel.bind("waiting", this.onWaiting);
 				
 				channel.bind("played", this.onPlayed);
 				
@@ -102,10 +107,11 @@ $(function () {
 			
 			onStartGame: function() {
 				console.log("start game");
+				this.$("h1").remove();
 				$(this.el).show()
 			},
 			
-			onWait: function(data) {
+			onWaiting: function(data) {
 				console.log(data);
 				$(this.el).append('<h1>waiting for players</h1>');
 			}
