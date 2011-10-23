@@ -45,9 +45,7 @@ $(function () {
 			},
 			initialize: function () {
 				$(this.el).hide();
-				_.bindAll(this, "onStartGame");
 				_.bindAll(this, "onNextPlay");
-				eventAgg.bind("startGame", this.onStartGame);
 				channel.bind("joinExistingGame", this.onNextPlay);
 				eventAgg.bind("nextPlay", this.onNextPlay);
 			},
@@ -61,9 +59,6 @@ $(function () {
 				});
 				input.val("");
 				return false;
-			},
-			onStartGame: function () {
-				$(this.el).show();
 			},
 			onNextPlay: function (data) {
 				if (data.isCurrentPlayer) {

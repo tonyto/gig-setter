@@ -52,16 +52,20 @@ pipe.connect();
 pipe.channels.on('event:join-game', function(channel_name, socket_id, data) {
 	eyes.inspect(arguments);
 	if(users.indexOf(data.player) === -1) {
+		console.log("User " + data.player + " not yet in the game. Adding.");
 		users.push(data.player);
+	} else {
+		console.log("User " + data.player + " already in the game");	
 	}
 	eyes.inspect(users);
 	if (users.length <= 1) {
 		console.log('not enough players');
 		pipe.channel(channel_name).trigger('waiting', {});
 	} else if (users.length === 2) {
-		console.log(users.length + " players found. game on!");
+		console.log("Two players; start game");
 		pipe.channel(channel_name).trigger("startGame", {currentPlayer: users[0]});
 	} else {
+		console.log("More than two players; join existing game");
 		pipe.channel(channel_name).trigger("joinExistingGame", {});
 	}
 });
@@ -98,9 +102,7 @@ function getNextPlayer(player) {
 	var current_player_index = users.indexOf(player),
 		current_player = users[(current_player_index + 1) % users.length];
 	
-	eyes.inspect(player);
-	eyes.inspect(users);
-	eyes.inspect(current_player_index);
+	console.log("Current player found");
 	eyes.inspect(current_player);
 	
 	return current_player;
