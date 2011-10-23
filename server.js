@@ -4,7 +4,8 @@ var express = require('express'),
 	DictionaryChecker = require('./lib/dictionaryChecker').DictionaryChecker,
 	eyes = require("eyes"),
 
-	dictionaryChecker = new DictionaryChecker,
+	dictionaryChecker = new DictionaryChecker(),
+    conversationStore = require('./lib/conversation-storer.js').conversationStore,
 	app = module.exports = express.createServer(),
 	users = [];
 	
@@ -31,7 +32,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
     res.render('play',{
-      title : 'WACADAY - MALLETS MALLET'
+      title : "WACADAY - MALLETT'S MALLET"
     });
 });
 
@@ -87,16 +88,29 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
+        if(success) {
+            var conversation = conversationStore.addWord(channel_name, data.player, data.word);
+            eyes.inspect(conversation);
+        }
+        
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
 			currentPlayer: getNextPlayer(data.player),
+            score: {'tony' : 0, 'Greg' : 10000},
 			success: success
 		});
 	}
-	
-	dictionaryChecker.check(data.word, respond);
+    
+	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
+        respond(false); 
+    } else {        
+       
+	    dictionaryChecker.check(data.word, respond);
+    }
+    
+	//dictionaryChecker.check(data.word, respond);
 }
 
 function getNextPlayer(player) {

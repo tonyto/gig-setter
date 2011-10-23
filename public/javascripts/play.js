@@ -90,13 +90,17 @@ $(function () {
 			},
 			
 			onPlayed: function(data){
-				$(this.el).prepend("<blockquote class='" + 
-				(data.success ? "success" : "fail") + 
-				" " +
-				(data.player === this.model.get("player") ? "self" : "opponent") + 
-				"'><p>" + 
-				data.word + 
-				"</p></blockquote>");
+				var elements = "<blockquote class='" + 
+					(data.success ? "success" : "fail") + 
+					" " +
+					(data.player === this.model.get("player") ? "self" : "opponent") + 
+					"'><p>" + 
+					data.word + 
+					"</p><footer>" +
+					data.player +
+					"</footer></blockquote>";
+				console.log(elements);
+				$(this.el).prepend(elements);
 			},
 			
 			onStartGame: function() {

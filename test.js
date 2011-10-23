@@ -3,17 +3,17 @@ var store = require('./lib/conversation-storer.js'),
     
 eyes.inspect(store);
 
-store.conversationStore.addWord('Greg_Tony', 'Greg', 'bollox');
+store.conversationStore.addWord('Greg_Tony', 'Greg', 'bollox', 1);
 
 eyes.inspect(store);
 
-store.conversationStore.addWord('Greg_Tony', 'Tony', 'sporking');
+store.conversationStore.addWord('Greg_Tony', 'Tony', 'sporking', 1);
 
 eyes.inspect(store);
 
-store.conversationStore.addWord('Greg_Tony2', 'Greg', 'spanking');
+store.conversationStore.addWord('Greg_Tony2', 'Greg', 'spanking', 1);
 
-var output = store.conversationStore.addWord('Greg_Tony2', 'Tony2', 'monkey');
+var output = store.conversationStore.addWord('Greg_Tony2', 'Tony2', 'monkey', 1);
 eyes.inspect(store);
 
 console.log(output);
