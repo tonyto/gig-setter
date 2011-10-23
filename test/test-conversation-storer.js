@@ -27,7 +27,7 @@ exports["should add new conversation if it don exists"] = function (test) {
     var key = 'Non_existant',
         player = 'Greg',
         result = conversationStore.addWord(key, player, 'WORD');
-        test.equal(result[player][0], 'WORD');
+        test.equal(result[player][0].Word, 'WORD');
         test.done();        
 };
 
@@ -38,7 +38,7 @@ exports["should retrieve conversation if exists"] = function (test) {
         
         conversationStore.getConversation(key, function(err, res){
             
-                test.equal(res[player][0], 'WORD');
+                test.equal(res[player][0].Word, 'WORD');
                 test.done();            
             }       
         );        

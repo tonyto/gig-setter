@@ -32,7 +32,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
     res.render('play',{
-      title : "WACADAY - MALLETT'S MALLET"
+      title : 'WACADAY - MALLETS MALLET'
     });
 });
 
@@ -48,19 +48,6 @@ var pipe = Pipe.createClient({
 });
 
 pipe.connect();
-
-pipe.sockets.on('open', function(socket_id) {
-	console.log('hello');
-});
-
-pipe.sockets.on('close', function(socket_id) {
-//	var remove_user = _.detect(users, function(user) {
-//		user.s_id === socket_id;
-//	});
-	console.log('closing connection for: ' + socket_id);	
-	//remove user form list
-	//alert other users
-});
 
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
@@ -88,16 +75,15 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
-        if(success) {
-            var conversation = conversationStore.addWord(channel_name, data.player, data.word);
-            eyes.inspect(conversation);
-        }
-        
+        var score = success ? 1 : -5;
+        var conversation = conversationStore.addWord(channel_name, data.player, data.word, score);
+        eyes.inspect(conversation);
+                
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: getNextPlayer(data.player),
+			currentPlayer: data.player === "bnathyuw" ? "tony" : "bnathyuw",
             score: {'tony' : 0, 'Greg' : 10000},
 			success: success
 		});
@@ -105,8 +91,7 @@ function onEventPlay(channel_name, socket_id, data) {
     
 	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
         respond(false); 
-    } else {        
-       
+    } else {               
 	    dictionaryChecker.check(data.word, respond);
     }
     
