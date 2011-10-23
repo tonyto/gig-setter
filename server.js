@@ -62,7 +62,9 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 });
 
-pipe.channels.on('event:play', function(channel_name, socket_id, data) {
+pipe.channels.on('event:play', onEventPlay);
+
+function(channel_name, socket_id, data) {
 	eyes.inspect(arguments);
 	eyes.inspect(pipe.sockets);
 	
@@ -84,4 +86,4 @@ pipe.channels.on('event:play', function(channel_name, socket_id, data) {
 	}
 	
 	dictionaryChecker.check(data.word, respond);
-});
+}
