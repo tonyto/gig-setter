@@ -6,6 +6,8 @@ $(function () {
 		player = Math.random(),
 	
 		game = "blah",
+		
+		channel = pusher.subscribe(game),
 	
 		GameModel = Backbone.Model.extend({
 			initialize: function () {
@@ -27,7 +29,7 @@ $(function () {
 			model: gameModel,
 			onSubmit: function () {
 				var input = $("input");
-				pusher.back_channel.trigger("play", {
+				channel.trigger("play", {
 					word: input.val(),
 					player: this.model.get("player"),
 					game: this.model.get("game")
@@ -45,7 +47,7 @@ $(function () {
 				var self = this;
 				_.bind(this, "onPlayed");
 				
-				pusher.back_channel.bind("played", function (data) {
+				channel.bind("played", function (data) {
 					self.onPlayed(data);
 				});
 			},
