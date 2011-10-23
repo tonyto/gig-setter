@@ -36,9 +36,10 @@ exports["should retrieve conversation if exists"] = function (test) {
     var key = 'New_conversation',
         player = 'Greg',        
         result = conversationStore.addWord(key, player, 'WORD');
+        
         conversationStore.getConversation(key, function(err, res){
             
-                test.equal(res[key][player][0], 'WORD');
+                test.equal(res[player][0], 'WORD');
                 test.done();            
             }       
         );        
