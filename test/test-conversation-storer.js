@@ -28,6 +28,21 @@ exports["should add new conversation if it don exists"] = function (test) {
     var key = 'Non_existant',
         player = 'Greg',
         result = conversationStore.addWord(key, player, 'WORD');
-        test.equal(result[player], 'WORD');
+        test.equal(result[player][0], 'WORD');
         test.done();        
 };
+
+exports["should retrieve conversation if exists"] = function (test) {
+    var key = 'New_conversation',
+        player = 'Greg',        
+        result = conversationStore.addWord(key, player, 'WORD');
+        conversationStore.getConversation(key, function(err, res){
+            
+                test.equal(res[key][player][0], 'WORD');
+                test.done();            
+            }       
+        );        
+};
+
+
+
