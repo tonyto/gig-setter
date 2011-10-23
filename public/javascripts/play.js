@@ -1,14 +1,15 @@
 $(function () {
 	var 
 		PlayView = Backbone.View.extend({
-			el: "#footer",
+			el: "#play",
 			events: {
-				"keyup input": "onKeyUp"
+				"submit": "onSubmit"
 			},
-			onKeyUp: function (e) {
-				if(e.keyCode === 13) {
-					pusher.back_channel.trigger("play", {word: e.currentTarget.value});
-				}
+			onSubmit: function () {
+				var input = $("input");
+				pusher.back_channel.trigger("play", {word: input.val()});
+				input.val("");
+				return false;
 			}
 		}),
 		
