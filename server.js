@@ -65,7 +65,7 @@ pipe.sockets.on('close', function(socket_id) {
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 	data.s_id = socket_id;
-	users.push(data);
+	users.push(data.player);
 	if (users.length === 1) {
 		console.log('not enough players');
 		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
@@ -114,6 +114,13 @@ function onEventPlay(channel_name, socket_id, data) {
 }
 
 function getNextPlayer(player) {
-	var current_player = users.indexOf(player);
-	return users[current_player++ % users.length];
+	var current_player_index = users.indexOf(player),
+		current_player = users[(current_player_index + 1) % users.length];
+	
+	eyes.inspect(player);
+	eyes.inspect(users);
+	eyes.inspect(current_player_index);
+	eyes.inspect(current_player);
+	
+	return current_player;
 }
