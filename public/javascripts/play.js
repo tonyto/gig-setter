@@ -90,7 +90,7 @@ $(function () {
 			},
 			
 			onPlayed: function(data){
-				$(this.el).append("<blockquote class='" + 
+				$(this.el).prepend("<blockquote class='" + 
 				(data.success ? "success" : "fail") + 
 				" " +
 				(data.player === this.model.get("player") ? "self" : "opponent") + 
