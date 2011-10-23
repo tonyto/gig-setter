@@ -83,7 +83,7 @@ function onEventPlay(channel_name, socket_id, data) {
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: data.player === getNextPlayer(data.player),
+			currentPlayer: getNextPlayer(data.player),
             score: {'tony' : 0, 'Greg' : 10000},
 			success: success
 		});
