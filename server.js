@@ -64,7 +64,7 @@ function onEventPlay(channel_name, socket_id, data) {
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: "opponent",
+			currentPlayer: data.player === "bnathyuw" ? "tony" : "bnathyuw",
 			success: success
 		});
 	}
