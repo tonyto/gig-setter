@@ -61,7 +61,7 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
-        var score = success ? 1, -5;
+        var score = success ? 1 : -5;
         var conversation = conversationStore.addWord(channel_name, data.player, data.word, score);
         eyes.inspect(conversation);
                 
@@ -75,9 +75,9 @@ function onEventPlay(channel_name, socket_id, data) {
 		});
 	}
     
-	//if(conversationStore.checkForDuplicates(channel_name, data.word)) {
-    //    respond(false); 
-    //} else {               
+	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
+        respond(false); 
+    } else {               
 	    dictionaryChecker.check(data.word, respond);
-    //}
+    }
 }
