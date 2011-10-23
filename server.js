@@ -55,7 +55,7 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 
 pipe.channels.on('event:play', onEventPlay);
 
-function(channel_name, socket_id, data) {
+function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(arguments);
 	eyes.inspect(pipe.sockets);
 	
