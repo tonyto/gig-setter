@@ -3,6 +3,8 @@ $(function () {
 	
 	var pusher = new Pusher('8e801345847980cd1c0d'),
 
+		eventAgg = _.extend({}, Backbone.Events),
+
 		player = Math.random(),
 	
 		game = "blah",
@@ -50,6 +52,8 @@ $(function () {
 				channel.bind("played", function (data) {
 					self.onPlayed(data);
 				});
+				
+				eventAgg.bind("startGame", this.onStartGame);
 			},
 			
 			onPlayed: function(data){
@@ -60,6 +64,12 @@ $(function () {
 				"'><p>" + 
 				data.word + 
 				"</p></blockquote>");
+			},
+			
+			onStartGame: function() {
+				console.log("start game");
+				$('#player').hide();
+				$('#footer').show()
 			}
 		}),
 		
@@ -72,6 +82,7 @@ $(function () {
 			
 			initialize: function () {
 				_.bind(this, "onJoinedGame");
+				$('#footer').hide();
 			},
 			
 			onJoinedGame: function (e) {
@@ -83,7 +94,8 @@ $(function () {
 						self.joinedGame(data);
 					});
 					
-					window.GameView = new GameView;
+					//trigger event
+					eventAgg.trigger("startGame");
 				};
 				return false;
 			}
@@ -91,6 +103,6 @@ $(function () {
 		
 		playerView = new PlayerView,
 		
-		playView = new PlayView;
-		//gameView = new GameView;
+		playView = new PlayView,
+		gameView = new GameView;
 });
