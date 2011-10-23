@@ -1,5 +1,10 @@
 $(function () {
-	var player = Math.random(),
+	Pusher.host = "ws.darling.pusher.com";
+	
+	var pusher = new Pusher('8e801345847980cd1c0d'),
+
+		player = Math.random(),
+	
 		game = "blah",
 	
 		GameModel = Backbone.Model.extend({
