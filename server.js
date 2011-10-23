@@ -51,7 +51,21 @@ pipe.connect();
 
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
-	users.push(data);
+	data.s_id = socket_id;
+	users.push(data.player);
+	if (users.length === 1) {
+		console.log('not enough players');
+		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
+	};
+});
+
+pipe.sockets.on('event:next-player', function(socket_id, data) {
+	for(var i=0; i<=users.length; i+=1){
+		if(users[i].s_id === socket_id){
+			console.log('found current player, next player is: ' + users[i+1].player);
+			pipe.socket(users[i+1].s_id).trigger('your-turn', {player: users[i+1].player});
+		}
+	}	
 });
 
 pipe.channels.on('event:play', onEventPlay);
@@ -61,7 +75,7 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
-        var score = success ? 1, -5;
+        var score = success ? 1 : -5;
         var conversation = conversationStore.addWord(channel_name, data.player, data.word, score);
         eyes.inspect(conversation);
                 
@@ -75,9 +89,23 @@ function onEventPlay(channel_name, socket_id, data) {
 		});
 	}
     
-	//if(conversationStore.checkForDuplicates(channel_name, data.word)) {
-    //    respond(false); 
-    //} else {               
+	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
+        respond(false); 
+    } else {               
 	    dictionaryChecker.check(data.word, respond);
-    //}
+    }
+    
+	//dictionaryChecker.check(data.word, respond);
+}
+
+function getNextPlayer(player) {
+	var current_player_index = users.indexOf(player),
+		current_player = users[(current_player_index + 1) % users.length];
+	
+	eyes.inspect(player);
+	eyes.inspect(users);
+	eyes.inspect(current_player_index);
+	eyes.inspect(current_player);
+	
+	return current_player;
 }
