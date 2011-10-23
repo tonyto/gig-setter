@@ -23,3 +23,11 @@ exports["should return true when there are duplicates "] = function (test) {
         test.equal(result, true);
         test.done();
 };
+
+exports["should add new conversation if it don exists"] = function (test) {
+    var key = 'Non_existant',
+        player = 'Greg',
+        result = conversationStore.addWord(key, player, 'WORD');
+        test.equal(result[player], 'WORD');
+        test.done();        
+};
