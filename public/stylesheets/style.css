@@ -122,7 +122,7 @@ clear:both;
    == OVER THOUGHT BUBBLE, EMPTY, WITH BORDER (more CSS3)
  ** ============================================================================================================================ */
 
-.oval-thought-border-right {
+blockquote.opponent {
 position:relative; 
 padding:50px 20px;
 margin:1em auto 80px;
@@ -145,12 +145,12 @@ Not correct application of the current spec, therefore, using longhand to avoid 
            border-radius:200px / 140px;
 }
 
-.oval-thought-border-right.fail {
+blockquote.opponent.fail {
 	border-color: #fff;
 }
 
 /* creates the larger circle */
-.oval-thought-border-right:before {
+blockquote.opponent:before {
 content:""; 
 position:absolute; 
          z-index:10; 
@@ -169,7 +169,7 @@ display:block;
 }
 
 /* creates the smaller circle */
-.oval-thought-border-right:after {
+blockquote.opponent:after {
 content:""; 
 position:absolute; 
          z-index:10; 
@@ -189,7 +189,7 @@ display:block;
 
 
 
-.oval-thought-border-left {
+blockquote.self {
 position:relative; 
 padding:50px 20px;
 margin:1em auto 80px;
@@ -213,7 +213,7 @@ Not correct application of the current spec, therefore, using longhand to avoid 
 }
 
 /* creates the larger circle */
-.oval-thought-border-left:before {
+blockquote.self:before {
 content:""; 
 position:absolute; 
          z-index:10; 
@@ -232,7 +232,7 @@ display:block;
 }
 
 /* creates the smaller circle */
-.oval-thought-border-left:after {
+blockquote.self:after {
 content:""; 
 position:absolute; 
          z-index:10; 
