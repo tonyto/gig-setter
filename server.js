@@ -5,7 +5,8 @@ var express = require('express'),
 	eyes = require("eyes"),
 
 	dictionaryChecker = new DictionaryChecker,
-	app = module.exports = express.createServer();
+	app = module.exports = express.createServer(),
+	users = [];
 	
 // Configuration
 
@@ -29,13 +30,6 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
-  });
-});
-
-
-app.get('/play', function(req, res){  
     res.render('play',{
       title : 'WACADAY - MALLETS MALLET'
     });
@@ -54,12 +48,9 @@ var pipe = Pipe.createClient({
 
 pipe.connect();
 
-pipe.sockets.on('event:create-game', function(socket_id, data) {
-	console.log(data);
-});
-
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
+	users.push(data);
 });
 
 pipe.channels.on('event:play', function(channel_name, socket_id, data) {
