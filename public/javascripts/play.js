@@ -3,6 +3,8 @@ $(function () {
 	
 	var pusher = new Pusher('8e801345847980cd1c0d'),
 
+		eventAgg = _.extend({}, Backbone.Events),
+
 		player = Math.random(),
 	
 		game = "blah",
@@ -50,6 +52,8 @@ $(function () {
 				channel.bind("played", function (data) {
 					self.onPlayed(data);
 				});
+				
+				eventAgg.bind("startGame", this.onStartGame);
 			},
 			
 			onPlayed: function(data){
@@ -60,8 +64,44 @@ $(function () {
 				"'><p>" + 
 				data.word + 
 				"</p></blockquote>");
+			},
+			
+			onStartGame: function() {
+				console.log("start game");
+				$('#player').hide();
+				$('#footer').show()
 			}
 		}),
+		
+		PlayerView = Backbone.View.extend({
+			el: "#player",
+			
+			events: {
+				"submit #player-form": "onJoinedGame"
+			},
+			
+			initialize: function () {
+				_.bind(this, "onJoinedGame");
+				$('#footer').hide();
+			},
+			
+			onJoinedGame: function (e) {
+				var text = $('.user').val();
+				if(text) {
+					var self = this;
+				
+					pusher.back_channel.bind("joinedGame", function (data) {
+						self.joinedGame(data);
+					});
+					
+					//trigger event
+					eventAgg.trigger("startGame");
+				};
+				return false;
+			}
+		}),
+		
+		playerView = new PlayerView,
 		
 		playView = new PlayView,
 		gameView = new GameView;
