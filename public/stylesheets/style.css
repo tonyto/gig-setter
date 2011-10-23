@@ -263,9 +263,9 @@ display:block;
 }
 
 
-.fail,
-.fail:before,
-.fail:after
+blockquote.fail,
+blockquote.fail:before,
+blockquote.fail:after
 {
 	border-color: #f00;
 }
