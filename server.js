@@ -31,7 +31,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
     res.render('play',{
-      title : 'WACADAY - MALLETS MALLET'
+      title : "WACADAY - MALLETT'S MALLET"
     });
 });
 
