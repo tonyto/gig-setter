@@ -62,10 +62,16 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 });
 
-pipe.sockets.on('event:play', function(socket_id, data) {
-	console.log(data);
+pipe.channels.on('event:play', function(channel_name, socket_id, data) {
+	eyes.inspect(arguments);
+	eyes.inspect(pipe.sockets);
 	dictionaryChecker.check(data.word, function (success) {
 		data.success = success;
-		pipe.socket(socket_id).trigger("played", data);
+		pipe.channel(channel_name).trigger("played", data);
+		pipe.channel(channel_name).trigger("played", {
+			word: "another " + data.word,
+			player: "opponent",
+			game: data.game
+		});
 	});
 });

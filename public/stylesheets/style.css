@@ -157,10 +157,6 @@ Not correct application of the current spec, therefore, using longhand to avoid 
            border-radius:200px / 140px;
 }
 
-blockquote.opponent.fail {
-	border-color: #fff;
-}
-
 /* creates the larger circle */
 blockquote.opponent:before {
 content:""; 

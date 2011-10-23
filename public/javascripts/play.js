@@ -60,7 +60,7 @@ $(function () {
 				$(this.el).append("<blockquote class='" + 
 				(data.success ? "success" : "fail") + 
 				" " +
-				(data.player === this.model.get("player") ? "self" : "oppponent") + 
+				(data.player === this.model.get("player") ? "self" : "opponent") + 
 				"'><p>" + 
 				data.word + 
 				"</p></blockquote>");
