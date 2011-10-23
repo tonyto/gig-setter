@@ -7,7 +7,6 @@ var express = require('express'),
 	dictionaryChecker = new DictionaryChecker,
 	app = module.exports = express.createServer();
 	
-	
 // Configuration
 
 app.configure(function(){
@@ -47,10 +46,10 @@ app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 var pipe = Pipe.createClient({
-    key: config.pusher.key,
-    secret: config.pusher.secret,
-    app_id: config.pusher.api_id,
-    debug: true
+    key: process.env.PUSHER_KEY || config.pusher.key,
+    secret: process.env.PUSHER_SECRET || config.pusher.secret,
+    app_id: process.env.PUSHER_API_ID || config.pusher.api_id,
+    debug: process.env.PUSHER_DEBUG || true
 });
 
 pipe.connect();
@@ -63,10 +62,16 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 });
 
-pipe.sockets.on('event:play', function(socket_id, data) {
-	console.log(data);
+pipe.channels.on('event:play', function(channel_name, socket_id, data) {
+	eyes.inspect(arguments);
+	eyes.inspect(pipe.sockets);
 	dictionaryChecker.check(data.word, function (success) {
 		data.success = success;
-		pipe.socket(socket_id).trigger("played", data);
+		pipe.channel(channel_name).trigger("played", data);
+		pipe.channel(channel_name).trigger("played", {
+			word: "another " + data.word,
+			player: "opponent",
+			game: data.game
+		});
 	});
 });
