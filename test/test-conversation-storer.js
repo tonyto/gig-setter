@@ -6,7 +6,6 @@ exports["should return false when there are no duplicates "] = function (test) {
         conversationStore.addWord(key,player,'hello');
         conversationStore.addWord(key,player,'is');
     
-
         result = conversationStore.checkForDuplicates(key,player);
 
         test.equal(result,false);
@@ -21,6 +20,6 @@ exports["should return true when there are duplicates "] = function (test) {
         conversationStore.addWord(key,player,'hello');
 
         result = conversationStore.checkForDuplicates(key,player);
-            test.equal(result, true);
-            test.done();
+        test.equal(result, true);
+        test.done();
 };
