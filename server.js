@@ -62,7 +62,7 @@ function onEventPlay(channel_name, socket_id, data) {
 	
 	function respond(success){
         if(success) {
-            var conversation = conversationStore.addWord(channel_name, data.player, data.word);
+            var conversation = conversationStore.addWord(channel_name, data.player, data.word, 1);
             eyes.inspect(conversation);
         }
         
@@ -76,12 +76,9 @@ function onEventPlay(channel_name, socket_id, data) {
 		});
 	}
     
-	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
-        respond(false); 
-    } else {        
-       
+	//if(conversationStore.checkForDuplicates(channel_name, data.word)) {
+    //    respond(false); 
+    //} else {               
 	    dictionaryChecker.check(data.word, respond);
-    }
-    
-	//dictionaryChecker.check(data.word, respond);
+    //}
 }
