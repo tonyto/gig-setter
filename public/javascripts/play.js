@@ -77,6 +77,11 @@ $(function () {
 			initialize: function () {
 				_.bindAll(this, "onPlayed");
 				_.bindAll(this, "onStartGame");
+				_.bindAll(this, "onWait");
+				
+				pusher.back_channel.bind("waiting", function (data) {
+					self.onWait(data);
+				});
 				
 				channel.bind("played", this.onPlayed);
 				
@@ -85,18 +90,27 @@ $(function () {
 			},
 			
 			onPlayed: function(data){
-				$(this.el).prepend("<blockquote class='" + 
-				(data.success ? "success" : "fail") + 
-				" " +
-				(data.player === this.model.get("player") ? "self" : "opponent") + 
-				"'><p>" + 
-				data.word + 
-				"</p></blockquote>");
+				var elements = "<blockquote class='" + 
+					(data.success ? "success" : "fail") + 
+					" " +
+					(data.player === this.model.get("player") ? "self" : "opponent") + 
+					"'><p>" + 
+					data.word + 
+					"</p><footer>" +
+					data.player +
+					"</footer></blockquote>";
+				console.log(elements);
+				$(this.el).prepend(elements);
 			},
 			
 			onStartGame: function() {
 				console.log("start game");
 				$(this.el).show()
+			},
+			
+			onWait: function(data) {
+				console.log(data);
+				$(this.el).append('<h1>waiting for players</h1>');
 			}
 		}),
 		
