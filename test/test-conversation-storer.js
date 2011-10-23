@@ -1,4 +1,5 @@
 var conversationStore = require("../lib/conversation-storer").conversationStore;
+var eyes = require("eyes");
 
 exports["should return false when there are no duplicates "] = function (test) {
     var key = 'Greg_Tony',
@@ -49,10 +50,14 @@ exports["should calculate score"] = function (test) {
         player = 'Greg';
         conversationStore.addWord(key, player, 'WORD',1);
         conversationStore.addWord(key, player, 'WORD',1);
+        conversationStore.addWord(key, 'Tony', 'WORD',1);
         
-        result = conversationStore.getCurrentScoreForPlayer(key,player);
-        
-        test.equal(result, 3);
+        result = conversationStore.getCurrentScores(key);
+       
+        eyes.inspect(result);
+
+        test.equal(result[player], 3);
+        test.equal(result['Tony'], 1);
         test.done();        
 };
 

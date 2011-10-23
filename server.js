@@ -84,7 +84,7 @@ function onEventPlay(channel_name, socket_id, data) {
 			word: data.word,
 			player: data.player,
 			currentPlayer: getNextPlayer(data.player),
-            score: {'tony' : 0, 'Greg' : 10000},
+            score: conversationStore.getCurrentScores(channel_name),
 			success: success
 		});
 	}
