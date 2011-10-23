@@ -69,5 +69,10 @@ pipe.channels.on('event:play', function(channel_name, socket_id, data) {
 	dictionaryChecker.check(data.word, function (success) {
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", data);
+		pipe.channel(channel_name).trigger("played", {
+			word: "another " + data.word,
+			player: "opponent",
+			game: data.game
+		});
 	});
 });
