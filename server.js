@@ -61,11 +61,17 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
+        if(success) {
+            var conversation = conversationStore.addWord(channel_name, data.player, data.word);
+            eyes.inspect(conversation);
+        }
+        
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
 			currentPlayer: data.player === "bnathyuw" ? "tony" : "bnathyuw",
+            score: {'tony' : 0, 'Greg' : 10000},
 			success: success
 		});
 	}
@@ -73,8 +79,7 @@ function onEventPlay(channel_name, socket_id, data) {
 	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
         respond(false); 
     } else {        
-        var conversation = conversationStore.addWord(channel_name, data.player, data.word);
-        eyes.inspect(conversation);
+       
 	    dictionaryChecker.check(data.word, respond);
     }
     
