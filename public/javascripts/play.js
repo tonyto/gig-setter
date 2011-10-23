@@ -61,6 +61,34 @@ $(function () {
 			}
 		}),
 		
-		playView = new PlayView,
-		gameView = new GameView;
+		PlayerView = Backbone.View.extend({
+			el: "#player",
+			
+			events: {
+				"submit #player-form": "onJoinedGame"
+			},
+			
+			initialize: function () {
+				_.bind(this, "onJoinedGame");
+			},
+			
+			onJoinedGame: function (e) {
+				var text = $('.user').val();
+				if(text) {
+					var self = this;
+				
+					pusher.back_channel.bind("joinedGame", function (data) {
+						self.joinedGame(data);
+					});
+					
+					window.GameView = new GameView;
+				};
+				return false;
+			}
+		}),
+		
+		playerView = new PlayerView,
+		
+		playView = new PlayView;
+		//gameView = new GameView;
 });

@@ -7,7 +7,6 @@ var express = require('express'),
 	dictionaryChecker = new DictionaryChecker,
 	app = module.exports = express.createServer();
 	
-	
 // Configuration
 
 app.configure(function(){
