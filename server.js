@@ -90,6 +90,20 @@ function onEventPlay(channel_name, socket_id, data) {
     } else {               
 	    dictionaryChecker.check(data.word, respond);
     }
+    
+	//dictionaryChecker.check(data.word, respond);
+}
+
+function getNextPlayer(player) {
+	var current_player_index = users.indexOf(player),
+		current_player = users[(current_player_index + 1) % users.length];
+	
+	eyes.inspect(player);
+	eyes.inspect(users);
+	eyes.inspect(current_player_index);
+	eyes.inspect(current_player);
+	
+	return current_player;
 }
 
 function getNextPlayer(player) {
