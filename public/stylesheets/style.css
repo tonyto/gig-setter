@@ -82,6 +82,10 @@ margin-left:300px;
 overflow: auto;
 }
 
+#player input {
+width: 400px;
+}
+
 h1 {
 margin:1em 0 0; 
        font-size:3em; 
