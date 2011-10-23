@@ -49,23 +49,19 @@ var pipe = Pipe.createClient({
 
 pipe.connect();
 
-pipe.sockets.on('event:join-game', function(socket_id, data) {
-	console.log(data);
-	data.s_id = socket_id;
-	users.push(data.player);
-	if (users.length === 1) {
+pipe.channels.on('event:join-game', function(channel_name, socket_id, data) {
+	eyes.inspect(arguments);
+	if(users.indexOf(data.player) === -1) {
+		users.push(data.player);
+	}
+	eyes.inspect(users);
+	if (users.length <= 1) {
 		console.log('not enough players');
-		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
-	};
-});
-
-pipe.sockets.on('event:next-player', function(socket_id, data) {
-	for(var i=0; i<=users.length; i+=1){
-		if(users[i].s_id === socket_id){
-			console.log('found current player, next player is: ' + users[i+1].player);
-			pipe.socket(users[i+1].s_id).trigger('your-turn', {player: users[i+1].player});
-		}
-	}	
+		pipe.channel(channel_name).trigger('waiting', {});
+	} else {
+		console.log(users.length + " players found. game on!");
+		pipe.channel(channel_name).trigger("startGame", {currentPlayer: users[0]});
+	}
 });
 
 pipe.channels.on('event:play', onEventPlay);
@@ -106,4 +102,9 @@ function getNextPlayer(player) {
 	eyes.inspect(current_player);
 	
 	return current_player;
+}
+
+function getNextPlayer(player) {
+	var current_player = users.indexOf(player);
+	return users[current_player++ % users.length];
 }
