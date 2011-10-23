@@ -26,7 +26,7 @@ exports["should return true when there are duplicates "] = function (test) {
 exports["should add new conversation if it don exists"] = function (test) {
     var key = 'Non_existant',
         player = 'Greg',
-        result = conversationStore.addWord(key, player, 'WORD');
+        result = conversationStore.addWord(key, player, 'WORD',1);
         test.equal(result[player][0].Word, 'WORD');
         test.done();        
 };
@@ -34,7 +34,7 @@ exports["should add new conversation if it don exists"] = function (test) {
 exports["should retrieve conversation if exists"] = function (test) {
     var key = 'New_conversation',
         player = 'Greg',        
-        result = conversationStore.addWord(key, player, 'WORD');
+        result = conversationStore.addWord(key, player, 'WORD',1);
         
         conversationStore.getConversation(key, function(err, res){
             
@@ -44,5 +44,16 @@ exports["should retrieve conversation if exists"] = function (test) {
         );        
 };
 
+exports["should calculate score"] = function (test) {
+    var key = 'Non_existant',
+        player = 'Greg';
+        conversationStore.addWord(key, player, 'WORD',1);
+        conversationStore.addWord(key, player, 'WORD',1);
+        
+        result = conversationStore.getCurrentScoreForPlayer(key,player);
+        
+        test.equal(result, 3);
+        test.done();        
+};
 
 
