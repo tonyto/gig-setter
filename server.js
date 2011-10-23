@@ -82,7 +82,7 @@ function onEventPlay(channel_name, socket_id, data) {
 			word: data.word,
 			player: data.player,
 			currentPlayer: getNextPlayer(data.player),
-            score: {'tony' : 0, 'Greg' : 10000},
+            score: conversationStore.getCurrentScores(channel_name),
 			success: success
 		});
 	}
@@ -104,4 +104,9 @@ function getNextPlayer(player) {
 	eyes.inspect(current_player);
 	
 	return current_player;
+}
+
+function getNextPlayer(player) {
+	var current_player = users.indexOf(player);
+	return users[current_player++ % users.length];
 }
