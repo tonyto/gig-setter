@@ -4,7 +4,8 @@ var express = require('express'),
 	DictionaryChecker = require('./lib/dictionaryChecker').DictionaryChecker,
 	eyes = require("eyes"),
 
-	dictionaryChecker = new DictionaryChecker,
+	dictionaryChecker = new DictionaryChecker(),
+    conversationStore = require('./lib/conversation-storer.js').conversationStore,
 	app = module.exports = express.createServer(),
 	users = [];
 	
@@ -68,6 +69,14 @@ function onEventPlay(channel_name, socket_id, data) {
 			success: success
 		});
 	}
-	
-	dictionaryChecker.check(data.word, respond);
+    
+	if(conversationStore.checkForDuplicates(channel_name, data.word)) {
+        respond(false); 
+    } else {        
+        var conversation = conversationStore.addWord(channel_name, data.player, data.word);
+        eyes.inspect(conversation);
+	    dictionaryChecker.check(data.word, respond);
+    }
+    
+	//dictionaryChecker.check(data.word, respond);
 }
