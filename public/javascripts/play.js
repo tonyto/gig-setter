@@ -77,6 +77,11 @@ $(function () {
 			initialize: function () {
 				_.bindAll(this, "onPlayed");
 				_.bindAll(this, "onStartGame");
+				_.bindAll(this, "onWait");
+				
+				pusher.back_channel.bind("waiting", function (data) {
+					self.onWait(data);
+				});
 				
 				channel.bind("played", this.onPlayed);
 				
@@ -97,6 +102,11 @@ $(function () {
 			onStartGame: function() {
 				console.log("start game");
 				$(this.el).show()
+			},
+			
+			onWait: function(data) {
+				console.log(data);
+				$(this.el).append('<h1>waiting for players</h1>');
 			}
 		}),
 		

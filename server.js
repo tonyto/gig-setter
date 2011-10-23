@@ -51,6 +51,10 @@ pipe.connect();
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 	users.push(data);
+	if (users.length === 1) {
+		console.log('not enough players');
+		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
+	};
 });
 
 pipe.channels.on('event:play', onEventPlay);
