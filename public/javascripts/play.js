@@ -14,23 +14,31 @@ $(function () {
 		GameModel = Backbone.Model.extend({
 			initialize: function () {
 				this.set({
-					player: player,
-					currentPlayer: player,
 					game: game
 				});
+				_.bindAll(this, "onStartGame");
+				eventAgg.bind("startGame", this.onStartGame)
+			},
+			onStartGame: function (player) {
+				this.set({player: player});
 			}
 		}),
 		
 		gameModel = new GameModel,
 		
 		PlayView = Backbone.View.extend({
-			el: "#play",
+			el: "#footer",
 			events: {
-				"submit": "onSubmit"
+				"submit #play": "onSubmit"
+			},
+			initialize: function () {
+				$(this.el).hide();
+				_.bindAll(this, "onStartGame");
+				eventAgg.bind("startGame", this.onStartGame);
 			},
 			model: gameModel,
 			onSubmit: function () {
-				var input = $("input");
+				var input = this.$("input");
 				channel.trigger("play", {
 					word: input.val(),
 					player: this.model.get("player"),
@@ -38,6 +46,9 @@ $(function () {
 				});
 				input.val("");
 				return false;
+			},
+			onStartGame: function () {
+				$(this.el).show();
 			}
 		}),
 		
@@ -47,13 +58,15 @@ $(function () {
 			
 			initialize: function () {
 				var self = this;
-				_.bind(this, "onPlayed");
+				_.bindAll(this, "onPlayed");
+				_.bindAll(this, "onStartGame");
 				
 				channel.bind("played", function (data) {
 					self.onPlayed(data);
 				});
 				
 				eventAgg.bind("startGame", this.onStartGame);
+				$(this.el).hide();
 			},
 			
 			onPlayed: function(data){
@@ -68,8 +81,7 @@ $(function () {
 			
 			onStartGame: function() {
 				console.log("start game");
-				$('#player').hide();
-				$('#footer').show()
+				$(this.el).show()
 			}
 		}),
 		
@@ -81,23 +93,24 @@ $(function () {
 			},
 			
 			initialize: function () {
-				_.bind(this, "onJoinedGame");
-				$('#footer').hide();
+				_.bindAll(this, "onJoinedGame");
+				_.bindAll(this, "onStartGame");
+				eventAgg.bind("startGame", this.onStartGame);
 			},
 			
 			onJoinedGame: function (e) {
-				var text = $('.user').val();
-				if(text) {
-					var self = this;
-				
-					pusher.back_channel.bind("joinedGame", function (data) {
-						self.joinedGame(data);
-					});
+				var player = this.$('input').val();
+				if(player) {
+					pusher.back_channel.trigger("join-game", {player: player});
 					
 					//trigger event
-					eventAgg.trigger("startGame");
+					eventAgg.trigger("startGame", player);
 				};
 				return false;
+			},
+			
+			onStartGame: function () {
+				$(this.el).hide();
 			}
 		}),
 		
