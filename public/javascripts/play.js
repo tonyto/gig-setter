@@ -28,6 +28,11 @@ $(function () {
 			events: {
 				"submit": "onSubmit"
 			},
+			initialize: function () {
+				$(this.el).hide();
+				_.bindAll(this, "onStartGame");
+				eventAgg.bind("startGame", this.onStartGame);
+			},
 			model: gameModel,
 			onSubmit: function () {
 				var input = $("input");
@@ -38,6 +43,9 @@ $(function () {
 				});
 				input.val("");
 				return false;
+			},
+			onStartGame: function () {
+				$(this.el).show();
 			}
 		}),
 		
@@ -47,13 +55,15 @@ $(function () {
 			
 			initialize: function () {
 				var self = this;
-				_.bind(this, "onPlayed");
+				_.bindAll(this, "onPlayed");
+				_.bindAll(this, "onStartGame");
 				
 				channel.bind("played", function (data) {
 					self.onPlayed(data);
 				});
 				
 				eventAgg.bind("startGame", this.onStartGame);
+				$(this.el).hide();
 			},
 			
 			onPlayed: function(data){
@@ -68,8 +78,7 @@ $(function () {
 			
 			onStartGame: function() {
 				console.log("start game");
-				$('#player').hide();
-				$('#footer').show()
+				$(this.el).show()
 			}
 		}),
 		
@@ -81,8 +90,9 @@ $(function () {
 			},
 			
 			initialize: function () {
-				_.bind(this, "onJoinedGame");
-				$('#footer').hide();
+				_.bindAll(this, "onJoinedGame");
+				_.bindAll(this, "onStartGame");
+				eventAgg.bind("startGame", this.onStartGame);
 			},
 			
 			onJoinedGame: function (e) {
@@ -98,6 +108,9 @@ $(function () {
 					eventAgg.trigger("startGame");
 				};
 				return false;
+			},
+			onStartGame: function () {
+				$(this.el).hide();
 			}
 		}),
 		
