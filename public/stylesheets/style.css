@@ -6,6 +6,10 @@ color:#333;
 background:#fff;
 }
 
+.hide{
+	display:none;
+}
+
 a:link,
     a:visited {
         border-bottom:1px solid #c55500; 
@@ -67,6 +71,14 @@ z-index:100;
 width:500px; 
 padding:0 0 50px; 
 margin:0 auto;
+overflow: auto;
+}
+
+#player {
+width:500px; 
+padding:0 0 50px; 
+margin-top:100px;
+margin-left:300px;
 overflow: auto;
 }
 
