@@ -18,12 +18,9 @@ $(function () {
 				});
 				_.bindAll(this, "onStartGame");
 				_.bindAll(this, "onPlayed");
-				eventAgg.bind("startGame", this.onStartGame);
+				channel.bind("startGame", this.onPlayed);
 				channel.bind("played", this.onPlayed);
 				
-			},
-			onStartGame: function (player) {
-				this.set({player: player});
 			},
 			onPlayed: function (data) {
 				this.set({currentPlayer: data.currentPlayer});
@@ -116,6 +113,7 @@ $(function () {
 		
 		PlayerView = Backbone.View.extend({
 			el: "#player",
+			model: gameModel,
 			
 			events: {
 				"submit #player-form": "onJoinedGame"
@@ -123,23 +121,16 @@ $(function () {
 			
 			initialize: function () {
 				_.bindAll(this, "onJoinedGame");
-				_.bindAll(this, "onStartGame");
-				eventAgg.bind("startGame", this.onStartGame);
 			},
 			
 			onJoinedGame: function (e) {
 				var player = this.$('input').val();
 				if(player) {
-					pusher.back_channel.trigger("join-game", {player: player});
-					
-					//trigger event
-					eventAgg.trigger("startGame", player);
+					channel.trigger("join-game", {player: player});
+					this.model.set({player: player});
+					$(this.el).hide();
 				};
 				return false;
-			},
-			
-			onStartGame: function () {
-				$(this.el).hide();
 			}
 		}),
 		
