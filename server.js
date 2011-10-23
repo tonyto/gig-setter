@@ -32,7 +32,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
     res.render('play',{
-      title : "WACADAY - MALLETT'S MALLET"
+      title : 'WACADAY - MALLETS MALLET'
     });
 });
 
@@ -49,36 +49,9 @@ var pipe = Pipe.createClient({
 
 pipe.connect();
 
-pipe.sockets.on('open', function(socket_id) {
-	console.log('hello');
-});
-
-pipe.sockets.on('close', function(socket_id) {
-//	var remove_user = _.detect(users, function(user) {
-//		user.s_id === socket_id;
-//	});
-	console.log('closing connection for: ' + socket_id);	
-	//remove user form list
-	//alert other users
-});
-
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
-	data.s_id = socket_id;
 	users.push(data);
-	if (users.length === 1) {
-		console.log('not enough players');
-		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
-	};
-});
-
-pipe.sockets.on('event:next-player', function(socket_id, data) {
-	for(var i=0; i<=users.length; i+=1){
-		if(users[i].s_id === socket_id){
-			console.log('found current player, next player is: ' + users[i+1].player);
-			pipe.socket(users[i+1].s_id).trigger('your-turn', {player: users[i+1].player});
-		}
-	}	
 });
 
 pipe.channels.on('event:play', onEventPlay);
@@ -88,16 +61,15 @@ function onEventPlay(channel_name, socket_id, data) {
 	eyes.inspect(pipe.sockets);
 	
 	function respond(success){
-        if(success) {
-            var conversation = conversationStore.addWord(channel_name, data.player, data.word, 1);
-            eyes.inspect(conversation);
-        }
-        
+        var score = success ? 1, -5;
+        var conversation = conversationStore.addWord(channel_name, data.player, data.word, score);
+        eyes.inspect(conversation);
+                
 		data.success = success;
 		pipe.channel(channel_name).trigger("played", {
 			word: data.word,
 			player: data.player,
-			currentPlayer: getNextPlayer(data.player),
+			currentPlayer: data.player === "bnathyuw" ? "tony" : "bnathyuw",
             score: {'tony' : 0, 'Greg' : 10000},
 			success: success
 		});
@@ -108,9 +80,4 @@ function onEventPlay(channel_name, socket_id, data) {
     //} else {               
 	    dictionaryChecker.check(data.word, respond);
     //}
-}
-
-function getNextPlayer(player) {
-	var current_player = users.indexOf(player);
-	return users[current_player++ % users.length];
 }
