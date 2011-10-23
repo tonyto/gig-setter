@@ -1,10 +1,13 @@
 var express = require('express'),
 	Pipe = require('pusher-pipe'),
-	config = require('./config');
+	config = require('./config'),
+	DictionaryChecker = require('./lib/dictionaryChecker').DictionaryChecker,
+	eyes = require("eyes"),
 
-
-var app = module.exports = express.createServer();
-
+	dictionaryChecker = new DictionaryChecker,
+	app = module.exports = express.createServer();
+	
+	
 // Configuration
 
 app.configure(function(){
@@ -62,5 +65,8 @@ pipe.sockets.on('event:join-game', function(socket_id, data) {
 
 pipe.sockets.on('event:play', function(socket_id, data) {
 	console.log(data);
-	pipe.socket(socket_id).trigger("played", data);
+	dictionaryChecker.check(data.word, function (success) {
+		data.success = success;
+		pipe.socket(socket_id).trigger("played", data);
+	});
 });
