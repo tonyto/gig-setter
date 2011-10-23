@@ -94,8 +94,6 @@ function onEventPlay(channel_name, socket_id, data) {
     } else {               
 	    dictionaryChecker.check(data.word, respond);
     }
-    
-	//dictionaryChecker.check(data.word, respond);
 }
 
 function getNextPlayer(player) {
