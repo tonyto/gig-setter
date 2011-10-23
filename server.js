@@ -52,6 +52,16 @@ pipe.connect();
 pipe.sockets.on('event:join-game', function(socket_id, data) {
 	console.log(data);
 	users.push(data);
+	if (users.length === 1) {
+		console.log('not enough players');
+		pipe.socket(socket_id).trigger('waiting', {data: 'no users'});
+	};
+});
+
+pipe.sockets.on('event:next-player', function(socket_id, data) {
+	var current_player = users.indexOf(data.player);
+		pipe.socket(users[current_player+1].s_id).trigger('your-turn', {player: users[current_player+1].player});
+	}
 });
 
 pipe.channels.on('event:play', onEventPlay);
@@ -80,4 +90,9 @@ function onEventPlay(channel_name, socket_id, data) {
     } else {               
 	    dictionaryChecker.check(data.word, respond);
     }
+}
+
+function getNextPlayer(player) {
+	var current_player = users.indexOf(player);
+	return users[current_player++ % users.length];
 }
