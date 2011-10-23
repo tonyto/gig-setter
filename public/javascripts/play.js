@@ -17,10 +17,16 @@ $(function () {
 					game: game
 				});
 				_.bindAll(this, "onStartGame");
-				eventAgg.bind("startGame", this.onStartGame)
+				_.bindAll(this, "onPlayed");
+				eventAgg.bind("startGame", this.onStartGame);
+				channel.bind("played", this.onPlayed);
+				
 			},
 			onStartGame: function (player) {
 				this.set({player: player});
+			},
+			onPlayed: function (data) {
+				this.set({currentPlayer: data.currentPlayer});
 			}
 		}),
 		
@@ -57,13 +63,10 @@ $(function () {
 			model: gameModel,
 			
 			initialize: function () {
-				var self = this;
 				_.bindAll(this, "onPlayed");
 				_.bindAll(this, "onStartGame");
 				
-				channel.bind("played", function (data) {
-					self.onPlayed(data);
-				});
+				channel.bind("played", this.onPlayed);
 				
 				eventAgg.bind("startGame", this.onStartGame);
 				$(this.el).hide();
